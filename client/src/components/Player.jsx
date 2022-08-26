@@ -18,7 +18,12 @@ export default function Player(props) {
       {props.dealer && <h2>Dealer</h2>}
       <h3>Cards: {props.cards}</h3>
       <h5>Chips: {chipCount}</h5>
-      <button onClick={()=> setChipCount(bet())}>Bet</button>
+      {props.active &&
+      <div>
+        <button>Check</button>
+        <button onClick={()=> setChipCount(bet())}>Bet</button>
+        <button>Fold</button>
+      </div>}
     </div>
   );
 }

@@ -9,14 +9,14 @@ const playersArray = [
     name: "Dan",
     hand: [],
     active: false,
-    dealer: false,
+    dealer: true,
     chips: 100
   },
   {
     name: "Brad",
     hand: [],
     active: false,
-    dealer: true,
+    dealer: false,
     chips: 100
   },
   {
@@ -106,12 +106,21 @@ function App() {
 
   const changeDealer = (players) => {
 
-    players[3].dealer = true;
-    // for (let i = 0; i < players.length; i ++) {
+    for (let i = 0; i < players.length; i ++) {
+
+      if (players[i].dealer === true && i === players.length - 1) {
+        players[i].dealer = false;
+        players[0].dealer = true;
+        return;
+      }
       
+      if (players[i].dealer === true && [i] < players.length - 1) {
+        players[i+1].dealer = true;
+        players[i].dealer = false;
+        return;
+      } 
       
-      
-    // }
+    }
   }
 
   const handleShuffle = () => {
