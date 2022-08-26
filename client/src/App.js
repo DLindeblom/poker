@@ -8,28 +8,24 @@ const playersArray = [
   {
     name: "Dan",
     hand: [],
-    active: false,
     dealer: true,
     chips: 100
   },
   {
     name: "Brad",
     hand: [],
-    active: false,
     dealer: false,
     chips: 100
   },
   {
     name: "Lee",
     hand: [],
-    active: false,
     dealer: false,
     chips: 100
   },
   {
     name: "Jarrett",
     hand: [],
-    active: false,
     dealer: false,
     chips: 100
   }];
@@ -41,6 +37,10 @@ const deck = ["As", "Ks", "Qs", "Js", "10s", "9s", "8s", "7s", "6s", "5s", "4s",
 function App() {
 
   const [players, setPlayers] = useState(playersArray);
+  const [playersInHand, setPlayersInHand] = useState(playersArray);
+  const [activePlayer, setActivePlayer] = useState(null)
+
+
   const [cards, setCards] = useState(null);
   const [flop, setFlop] = useState(null);
   const [turn, setTurn] = useState(null);
@@ -49,6 +49,8 @@ function App() {
   const [flopIsShown, setFlopIsShown] = useState(false);
   const [turnIsShown, setTurnIsShown] = useState(false);
   const [riverIsShown, setRiverIsShown] = useState(false);
+
+  const [potCount, setPotCount] = useState(0);
 
 
   const shuffle = (cards) => {
@@ -70,8 +72,14 @@ function App() {
   }, []);
 
   const runDeal = (players, cards) => {
+    for (let i = 0; i < players.length; i++) {
+      if (players[i].chips === 0) {
+        players.splice(i, 1);
+      }
+    }
 
     players.map((player, playerIndex) => {
+      
       player.hand = [];
       return player.hand.push(cards[playerIndex], cards[players.length + playerIndex]);
     });
@@ -108,13 +116,13 @@ function App() {
 
     for (let i = 0; i < players.length; i ++) {
 
-      if (players[i].dealer === true && i === players.length - 1) {
+      if (players[i].dealer && i === players.length - 1) {
         players[i].dealer = false;
         players[0].dealer = true;
         return;
       }
       
-      if (players[i].dealer === true && [i] < players.length - 1) {
+      if (players[i].dealer && i < players.length - 1) {
         players[i+1].dealer = true;
         players[i].dealer = false;
         return;
@@ -122,6 +130,10 @@ function App() {
       
     }
   }
+
+
+
+
 
   const handleShuffle = () => {
     shuffle(deck)
@@ -138,6 +150,7 @@ function App() {
     setTurnIsShown(false);
     setRiverIsShown(false);
     changeDealer(players);
+    setPotCount(0)
 
   };
 
@@ -165,6 +178,10 @@ function App() {
         chips={player.chips}
         playerNumber={playerIndex + 1}
         dealer={player.dealer}
+        players={players}
+        setPotCount={setPotCount}
+        potCount={potCount}
+        
       />
     );
   });
@@ -178,6 +195,9 @@ function App() {
       <div className="players">
         {onePlayer}
       </div>
+      <div className="players">
+        Pot: {potCount}
+      </div>
       <div className="button">
         <button onClick={handleDeal}>Deal!</button>
       </div>
@@ -186,8 +206,8 @@ function App() {
       </div>
       <div className="button">
         <div className="button--row"><button onClick={handleFlop}>Show me the Flop!</button></div>
-        <div className="button--row"><button onClick={handleTurn}>Show me the Turn!</button></div>
-        <div className="button--row"><button onClick={handleRiver}>Show me the River!</button></div>
+        {flopIsShown && <div className="button--row"><button onClick={handleTurn}>Show me the Turn!</button></div>}
+        {(flopIsShown && turnIsShown) && <div className="button--row"><button onClick={handleRiver}>Show me the River!</button></div>}
       </div>
       {flopIsShown && <div className="flop">
         <h2 className="flop--card">{flop[0]}</h2>
