@@ -9,14 +9,18 @@ export default function Player(props) {
 
   const handleBet = () => {
 
-    const chips = chipCount - 5
-    const pot = props.potCount + 5
+    if (chipCount > 0){
+
+      const chips = chipCount - 5
+      const pot = props.potCount + 5
+
+      setChipCount(chips)
+      props.setPotCount(pot)
+    }
     
+  }
+  
 
-    setChipCount(chips)
-    props.setPotCount(pot)
-
-  }  
 
 
 

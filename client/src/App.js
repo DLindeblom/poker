@@ -64,7 +64,6 @@ function App() {
     return cards;
   };
 
-
   useEffect(() => {
 
     setCards(shuffle(deck));
@@ -131,15 +130,9 @@ function App() {
     }
   }
 
-
-
-
-
   const handleShuffle = () => {
     shuffle(deck)
   }
-
-  
 
   const handleDeal = async () => {
 
@@ -169,7 +162,7 @@ function App() {
     setRiverIsShown(true);
   };
 
-  const onePlayer = players.map((player, playerIndex) => {
+  const onePlayer = playersInHand.map((player, playerIndex) => {
     return (
       <Player
         key={playerIndex}
@@ -178,16 +171,14 @@ function App() {
         chips={player.chips}
         playerNumber={playerIndex + 1}
         dealer={player.dealer}
-        players={players}
+        players={playersInHand}
         setPotCount={setPotCount}
         potCount={potCount}
+        setPlayersInHand={setPlayersInHand}
         
       />
     );
   });
-
-
-
 
   return (
     <>
